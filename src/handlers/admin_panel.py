@@ -9,7 +9,7 @@ router = Router()
 async def admin_panel_handler(message: Message):
     """Обработчик команды /admin"""
     # Здесь можно добавить проверку на админа
-    admin_ids = [123456789]  # Замените на реальные ID администраторов
+    admin_ids = [4444]  # Замените на реальные ID администраторов
 
     if message.from_user.id in admin_ids:
         await message.answer("Добро пожаловать в панель администратора!")

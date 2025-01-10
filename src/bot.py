@@ -3,14 +3,11 @@ import logging
 from typing import NoReturn
 
 from aiogram import Bot, Dispatcher
-from aiogram.enums import ParseMode
 from aiogram.exceptions import TelegramUnauthorizedError
 
 from config import TELEGRAM_BOT_TOKEN
 from handlers.start import register_start_handlers
 from handlers.admin_panel import register_admin_handlers
-
-# Add more handler imports as needed
 
 # Configure logging
 logging.basicConfig(
@@ -19,7 +16,7 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Initialize bot and dispatcher
-bot = Bot(token=TELEGRAM_BOT_TOKEN, parse_mode=ParseMode.HTML)
+bot = Bot(TELEGRAM_BOT_TOKEN)
 dp = Dispatcher()
 
 

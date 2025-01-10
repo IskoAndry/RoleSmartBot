@@ -30,6 +30,8 @@ async def help_command(message: Message):
     text = (
         "Добро пожаловать в Telegram-бот!\n"
         "Вот доступные команды:\n"
+        "/register - Зарегистрироваться\n"
+        "/auth - Вход\n"
         "/help - Получить список команд\n"
         "/role - Выбор роли\n"
         "/balance - Проверить баланс\n"

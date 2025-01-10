@@ -1,8 +1,8 @@
+from .auth import router as auth_router
 from aiogram import Router
 from aiogram.types import Message
 from aiogram.filters import Command, CommandStart
 from keyboards.inline import get_role_keyboard
-from handlers.admin_panel import admin_panel_handler
 
 # Создаем роутер для регистрации обработчиков
 router = Router()
@@ -44,3 +44,4 @@ async def help_command(message: Message):
 def register_start_handlers(dispatcher):
     """Регистрация обработ команд в диспетчере"""
     dispatcher.include_router(router)
+    dispatcher.include_router(auth_router)  # Подключаем маршруты из auth

@@ -14,3 +14,8 @@ PAYMENT_API_KEY = os.getenv("PAYMENT_API_KEY")
 # Проверка наличия токена
 if not TELEGRAM_BOT_TOKEN:
     raise ValueError("Bot token not found! Please set BOT_TOKEN in your .env file")
+
+if not DATABASE_URL:
+    raise ValueError(
+        "DATABASE_URL token not found! Please set DATABASE_URL in your .env file"
+    )

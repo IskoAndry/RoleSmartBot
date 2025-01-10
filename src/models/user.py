@@ -1,16 +1,13 @@
-# user.py
-from aiogram import Router, types
-from aiogram.filters import Command
+from sqlalchemy import Column, Integer, String, Boolean
+from database import Base
 
-router = Router()
 
-@router.message(Command("profile"))
-async def profile_handler(message: types.Message):
-    """Handle user profile command"""
-    user_id = message.from_user.id
-    username = message.from_user.username
-    await message.answer(
-        f"Your Profile:\n"
-        f"ID: {user_id}\n"
-        f"Username: @{username}"
-    )
+class User(Base):
+    __tablename__ = "users"
+
+    id = Column(Integer, primary_key=True, index=True)
+    telegram_id = Column(Integer, unique=True, nullable=False)
+    name = Column(String, nullable=False)
+    phone = Column(String, nullable=False)
+    password = Column(String, nullable=False)
+    is_admin = Column(Boolean, default=False)

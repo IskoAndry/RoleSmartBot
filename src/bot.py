@@ -9,6 +9,9 @@ from config import TELEGRAM_BOT_TOKEN
 from handlers.start import register_start_handlers
 from handlers.admin_panel import register_admin_handlers
 
+from database import init_db
+
+
 # Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
@@ -53,4 +56,5 @@ async def main() -> NoReturn:
 
 
 if __name__ == "__main__":
+    init_db()  # Инициализация базы данных
     asyncio.run(main())

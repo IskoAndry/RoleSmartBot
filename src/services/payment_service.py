@@ -2,8 +2,9 @@ import psycopg2
 from psycopg2.extras import DictCursor
 from config import DATABASE_URL
 from aiogram import Bot
+from config import TELEGRAM_BOT_TOKEN
 
-bot = Bot(token="YOUR_TELEGRAM_BOT_TOKEN")
+bot = Bot(token=TELEGRAM_BOT_TOKEN)
 
 
 async def handle_payment(user_id: int, amount: int):

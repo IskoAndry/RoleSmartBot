@@ -1,56 +1,59 @@
 import asyncio
 import logging
+from typing import NoReturn
+
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
-from aiogram.client.session.aiohttp import AiohttpSession
-from aiogram.fsm.storage.memory import MemoryStorage
-from aiogram.client.bot import DefaultBotProperties
+from aiogram.exceptions import TelegramUnauthorizedError
 
 from config import TELEGRAM_BOT_TOKEN
 from handlers.start import register_start_handlers
-from handlers.error_handlers import register_error_handlers
+from handlers.admin_panel import register_admin_handlers
 
-# Настройка логирования
+# Add more handler imports as needed
+
+# Configure logging
 logging.basicConfig(
     level=logging.INFO, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s"
 )
 logger = logging.getLogger(__name__)
 
-async def main():
-    """
-    Основная функция запуска бота.
-    """
-    # Создаем HTTP-сессию для бота
-    session = AiohttpSession()
+# Initialize bot and dispatcher
+bot = Bot(token=TELEGRAM_BOT_TOKEN, parse_mode=ParseMode.HTML)
+dp = Dispatcher()
 
-    # Создаем объект бота с указанием `default` параметров
-    bot = Bot(
-        token=TELEGRAM_BOT_TOKEN,
-        session=session,
-        default=DefaultBotProperties(parse_mode=ParseMode.HTML),
-    )
 
-    # Создаем диспетчер с хранилищем
-    dp = Dispatcher(storage=MemoryStorage())
-
-    # Регистрируем обработчики
+async def register_all_handlers() -> None:
+    """Register all handlers"""
     register_start_handlers(dp)
-    register_error_handlers(dp)
+    register_admin_handlers(dp)
+    # Add more handlers registration here
 
-    logger.info("Бот запущен...")
 
+async def start_bot() -> None:
+    """Start bot polling"""
     try:
-        # Запускаем бота
+        logger.info("Starting bot...")
+        await register_all_handlers()
         await dp.start_polling(bot)
+    except TelegramUnauthorizedError:
+        logger.critical("Invalid bot token! Please check your configuration.")
+        exit(1)
     except Exception as e:
-        logger.error(f"Критическая ошибка: {e}")
+        logger.critical(f"Unexpected error: {e}")
+        exit(1)
+
+
+async def main() -> NoReturn:
+    """Main function"""
+    try:
+        await start_bot()
+    except KeyboardInterrupt:
+        logger.info("Bot stopped manually")
     finally:
-        # Закрываем HTTP-сессию
         await bot.session.close()
-        logger.info("Бот остановлен")
+        logger.info("Bot stopped")
+
 
 if __name__ == "__main__":
-    try:
-        asyncio.run(main())
-    except (KeyboardInterrupt, SystemExit):
-        logger.info("Бот остановлен вручную")
+    asyncio.run(main())

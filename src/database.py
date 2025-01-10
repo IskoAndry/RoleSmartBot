@@ -7,6 +7,7 @@ from config import DATABASE_URL
 import os
 
 
+
 # Database setup
 def setup_database():
     conn = psycopg2.connect(DATABASE_URL)
@@ -76,3 +77,5 @@ def setup_database():
 
 
 setup_database()
+
+

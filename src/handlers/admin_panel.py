@@ -1,30 +1,22 @@
-from aiogram import types
-from aiogram.dispatcher import Dispatcher
-from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
-from sqlalchemy.orm import Session
-from models.user import User
-from database import SessionLocal
+from aiogram import Router, types
+from aiogram.filters import Command
+from aiogram.types import Message
+
+router = Router()
 
 
-# Панель администратора
-async def admin_panel_handler(message: types.Message):
-    db: Session = SessionLocal()
-    user = db.query(User).filter(User.telegram_id == message.from_user.id).first()
-    if user and user.is_admin:
-        keyboard = InlineKeyboardMarkup()
-        keyboard.add(
-            InlineKeyboardButton(
-                "Управление пользователями", callback_data="manage_users"
-            )
-        )
-        keyboard.add(InlineKeyboardButton("Статистика", callback_data="statistics"))
-        await message.reply(
-            "Добро пожаловать в панель администратора.", reply_markup=keyboard
-        )
+@router.message(Command("admin"))
+async def admin_panel_handler(message: Message):
+    """Обработчик команды /admin"""
+    # Здесь можно добавить проверку на админа
+    admin_ids = [123456789]  # Замените на реальные ID администраторов
+
+    if message.from_user.id in admin_ids:
+        await message.answer("Добро пожаловать в панель администратора!")
     else:
-        await message.reply("У вас нет прав администратора.")
+        await message.answer("У вас нет доступа к панели администратора.")
 
 
-# Регистрация обработчиков
-def register_admin_handlers(dp: Dispatcher):
-    dp.register_message_handler(admin_panel_handler, commands=["admin"])
+def register_admin_handlers(dp):
+    """Регистрация обработчиков админ-панели"""
+    dp.include_router(router)

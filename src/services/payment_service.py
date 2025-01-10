@@ -7,6 +7,7 @@ bot = Bot(token="YOUR_TELEGRAM_BOT_TOKEN")
 
 
 async def handle_payment(user_id: int, amount: int):
+    """func"""
     conn = psycopg2.connect(DATABASE_URL)
     cur = conn.cursor()
 
@@ -33,6 +34,7 @@ async def handle_payment(user_id: int, amount: int):
 
 
 async def notify_low_balance(user_id: int):
+    """func"""
     conn = psycopg2.connect(DATABASE_URL, cursor_factory=DictCursor)
     cur = conn.cursor()
 
